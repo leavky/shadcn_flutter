@@ -1,7 +1,6 @@
 import '../../../shadcn_flutter.dart';
 
-class CheckboxController extends ValueNotifier<CheckboxState>
-    with ComponentController<CheckboxState> {
+class CheckboxController extends ValueNotifier<CheckboxState> with ComponentController<CheckboxState> {
   CheckboxController(super.value);
 
   void check() {
@@ -17,9 +16,7 @@ class CheckboxController extends ValueNotifier<CheckboxState>
   }
 
   void toggle() {
-    value = value == CheckboxState.checked
-        ? CheckboxState.unchecked
-        : CheckboxState.checked;
+    value = value == CheckboxState.checked ? CheckboxState.unchecked : CheckboxState.checked;
   }
 
   void toggleTristate() {
@@ -35,8 +32,7 @@ class CheckboxController extends ValueNotifier<CheckboxState>
   bool get isIndeterminate => value == CheckboxState.indeterminate;
 }
 
-class ControlledCheckbox extends StatelessWidget
-    with ControlledComponent<CheckboxState> {
+class ControlledCheckbox extends StatelessWidget with ControlledComponent<CheckboxState> {
   @override
   final CheckboxController? controller;
   @override
@@ -114,8 +110,7 @@ class Checkbox extends StatefulWidget {
   _CheckboxState createState() => _CheckboxState();
 }
 
-class _CheckboxState extends State<Checkbox>
-    with FormValueSupplier<CheckboxState, Checkbox> {
+class _CheckboxState extends State<Checkbox> with FormValueSupplier<CheckboxState, Checkbox> {
   final bool _focusing = false;
   bool _shouldAnimate = false;
 
@@ -146,9 +141,7 @@ class _CheckboxState extends State<Checkbox>
       }
     } else {
       _changeTo(
-        widget.state == CheckboxState.checked
-            ? CheckboxState.unchecked
-            : CheckboxState.checked,
+        widget.state == CheckboxState.checked ? CheckboxState.unchecked : CheckboxState.checked,
       );
     }
   }
@@ -174,9 +167,7 @@ class _CheckboxState extends State<Checkbox>
     final theme = Theme.of(context);
     return Clickable(
       enabled: widget.onChanged != null,
-      mouseCursor: enabled
-          ? const WidgetStatePropertyAll(SystemMouseCursors.click)
-          : const WidgetStatePropertyAll(SystemMouseCursors.forbidden),
+      mouseCursor: enabled ? const WidgetStatePropertyAll(SystemMouseCursors.click) : const WidgetStatePropertyAll(SystemMouseCursors.forbidden),
       onPressed: enabled ? _tap : null,
       enableFeedback: enabled,
       child: Row(
@@ -184,15 +175,13 @@ class _CheckboxState extends State<Checkbox>
         mainAxisSize: MainAxisSize.min,
         children: [
           if (widget.leading != null) widget.leading!.small().medium(),
-          SizedBox(width: theme.scaling * 8),
+          widget.leading != null ? SizedBox(width: theme.scaling * 8) : const SizedBox.shrink(),
           AnimatedContainer(
             duration: kDefaultDuration,
             width: theme.scaling * 16,
             height: theme.scaling * 16,
             decoration: BoxDecoration(
-              color: widget.state == CheckboxState.checked
-                  ? theme.colorScheme.primary
-                  : theme.colorScheme.primary.withValues(alpha: 0),
+              color: widget.state == CheckboxState.checked ? theme.colorScheme.primary : theme.colorScheme.primary.withValues(alpha: 0),
               borderRadius: BorderRadius.circular(theme.radiusSm),
               border: Border.all(
                 color: !enabled
@@ -236,12 +225,8 @@ class _CheckboxState extends State<Checkbox>
                 : Center(
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 100),
-                      width: widget.state == CheckboxState.indeterminate
-                          ? theme.scaling * 8
-                          : 0,
-                      height: widget.state == CheckboxState.indeterminate
-                          ? theme.scaling * 8
-                          : 0,
+                      width: widget.state == CheckboxState.indeterminate ? theme.scaling * 8 : 0,
+                      height: widget.state == CheckboxState.indeterminate ? theme.scaling * 8 : 0,
                       padding: EdgeInsets.zero,
                       decoration: BoxDecoration(
                         color: theme.colorScheme.primary,
@@ -250,7 +235,7 @@ class _CheckboxState extends State<Checkbox>
                     ),
                   ),
           ),
-          SizedBox(width: theme.scaling * 8),
+          widget.trailing != null ? SizedBox(width: theme.scaling * 8) : const SizedBox.shrink(),
           if (widget.trailing != null) widget.trailing!.small().medium(),
         ],
       ),
@@ -281,26 +266,19 @@ class AnimatedCheckPainter extends CustomPainter {
     Offset firstStrokeEnd = Offset(size.width * 0.35, size.height);
     Offset secondStrokeStart = firstStrokeEnd;
     Offset secondStrokeEnd = Offset(size.width, 0);
-    double firstStrokeLength =
-        (firstStrokeEnd - firstStrokeStart).distanceSquared;
-    double secondStrokeLength =
-        (secondStrokeEnd - secondStrokeStart).distanceSquared;
+    double firstStrokeLength = (firstStrokeEnd - firstStrokeStart).distanceSquared;
+    double secondStrokeLength = (secondStrokeEnd - secondStrokeStart).distanceSquared;
     double totalLength = firstStrokeLength + secondStrokeLength;
 
     double normalizedFirstStrokeLength = firstStrokeLength / totalLength;
     double normalizedSecondStrokeLength = secondStrokeLength / totalLength;
 
-    double firstStrokeProgress =
-        progress.clamp(0.0, normalizedFirstStrokeLength) /
-            normalizedFirstStrokeLength;
-    double secondStrokeProgress = (progress - normalizedFirstStrokeLength)
-            .clamp(0.0, normalizedSecondStrokeLength) /
-        normalizedSecondStrokeLength;
+    double firstStrokeProgress = progress.clamp(0.0, normalizedFirstStrokeLength) / normalizedFirstStrokeLength;
+    double secondStrokeProgress = (progress - normalizedFirstStrokeLength).clamp(0.0, normalizedSecondStrokeLength) / normalizedSecondStrokeLength;
     if (firstStrokeProgress <= 0) {
       return;
     }
-    Offset currentPoint =
-        Offset.lerp(firstStrokeStart, firstStrokeEnd, firstStrokeProgress)!;
+    Offset currentPoint = Offset.lerp(firstStrokeStart, firstStrokeEnd, firstStrokeProgress)!;
     path.moveTo(firstStrokeStart.dx, firstStrokeStart.dy);
     path.lineTo(currentPoint.dx, currentPoint.dy);
     if (secondStrokeProgress <= 0) {
@@ -318,8 +296,6 @@ class AnimatedCheckPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant AnimatedCheckPainter oldDelegate) {
-    return oldDelegate.progress != progress ||
-        oldDelegate.color != color ||
-        oldDelegate.strokeWidth != strokeWidth;
+    return oldDelegate.progress != progress || oldDelegate.color != color || oldDelegate.strokeWidth != strokeWidth;
   }
 }
